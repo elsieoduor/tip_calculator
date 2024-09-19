@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tip_calculator/widgets/bill_amount.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
 import 'package:tip_calculator/widgets/tip_slider.dart';
 
@@ -31,9 +32,16 @@ class YuTip extends StatefulWidget {
 
 class _YuTipState extends State<YuTip> {
   int _personCount = 1;
-
   double _tipPercentage = 0.0;
+  double _billTotal = 0.0;
 
+  double totalPerPerson() {
+    return ((_billTotal * _tipPercentage) + (_billTotal)) / _personCount;
+  }
+
+  double totalTip(){
+    return ((_billTotal * _tipPercentage));
+  }
   void increment() {
     setState(() {
       _personCount = _personCount + 1;
@@ -42,7 +50,7 @@ class _YuTipState extends State<YuTip> {
 
   void decrement() {
     setState(() {
-      if (_personCount > 0) {
+      if (_personCount > 1) {
         _personCount--;
       }
     });
@@ -51,6 +59,8 @@ class _YuTipState extends State<YuTip> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    double total = totalPerPerson();
+    double tip = totalTip();
     final style = theme.textTheme.titleMedium!.copyWith(
         color: theme.colorScheme.onPrimary, fontWeight: FontWeight.bold);
     return Scaffold(
@@ -75,7 +85,7 @@ class _YuTipState extends State<YuTip> {
                       style: style,
                     ),
                     Text(
-                      '\$20.60',
+                      '$total',
                       style: style.copyWith(
                           color: theme.colorScheme.onPrimary,
                           fontSize: theme.textTheme.displaySmall?.fontSize),
@@ -87,6 +97,7 @@ class _YuTipState extends State<YuTip> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
+                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border:
@@ -94,14 +105,13 @@ class _YuTipState extends State<YuTip> {
                 ),
                 child: Column(
                   children: [
-                    TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.attach_money),
-                        labelText: 'Bill Amount',
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (String value) {},
+                    BillAmountField(
+                      billAmount: _billTotal.toString(),
+                      onChanged: (value) => {
+                        setState(() {
+                          _billTotal = double.parse(value);
+                        })
+                      },
                     ),
                     //Split Bill area
                     Row(
@@ -129,7 +139,7 @@ class _YuTipState extends State<YuTip> {
                           style: theme.textTheme.titleMedium,
                         ),
                         Text(
-                          '\$ 20',
+                          '$tip',
                           style: theme.textTheme.titleMedium,
                         )
                       ],
@@ -139,11 +149,14 @@ class _YuTipState extends State<YuTip> {
                     Text('${(_tipPercentage * 100).round()}%'),
 
                     //Slider
-                    TipSlider(tipPercentage: _tipPercentage, onChanged: (double value) { 
-                      setState(() {
-                        _tipPercentage = value;
-                      });
-                    },)
+                    TipSlider(
+                      tipPercentage: _tipPercentage,
+                      onChanged: (double value) {
+                        setState(() {
+                          _tipPercentage = value;
+                        });
+                      },
+                    )
                   ],
                 )),
           )
@@ -152,4 +165,3 @@ class _YuTipState extends State<YuTip> {
     );
   }
 }
-
