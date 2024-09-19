@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tip_calculator/widgets/bill_amount.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
 import 'package:tip_calculator/widgets/tip_slider.dart';
+import 'package:tip_calculator/widgets/total_per_person.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,9 +40,10 @@ class _YuTipState extends State<YuTip> {
     return ((_billTotal * _tipPercentage) + (_billTotal)) / _personCount;
   }
 
-  double totalTip(){
+  double totalTip() {
     return ((_billTotal * _tipPercentage));
   }
+
   void increment() {
     setState(() {
       _personCount = _personCount + 1;
@@ -70,29 +72,7 @@ class _YuTipState extends State<YuTip> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.inversePrimary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Total Per Person',
-                      style: style,
-                    ),
-                    Text(
-                      '$total',
-                      style: style.copyWith(
-                          color: theme.colorScheme.onPrimary,
-                          fontSize: theme.textTheme.displaySmall?.fontSize),
-                    )
-                  ],
-                )),
-          ),
+          TotalPerPerson(theme: theme, style: style, total: total),
           //Form
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -114,21 +94,14 @@ class _YuTipState extends State<YuTip> {
                       },
                     ),
                     //Split Bill area
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Split",
-                          style: theme.textTheme.titleMedium,
-                        ),
+                    
                         PersonCounter(
                           theme: theme,
                           personCount: _personCount,
                           onDecrement: decrement,
                           onIncrement: increment,
-                        )
-                      ],
-                    ),
+                        ),
+                    
 
                     //Tip Area
                     Row(
@@ -165,3 +138,4 @@ class _YuTipState extends State<YuTip> {
     );
   }
 }
+
