@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
+import 'package:tip_calculator/widgets/tip_slider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +31,8 @@ class YuTip extends StatefulWidget {
 
 class _YuTipState extends State<YuTip> {
   int _personCount = 1;
+
+  double _tipPercentage = 0.0;
 
   void increment() {
     setState(() {
@@ -108,9 +111,39 @@ class _YuTipState extends State<YuTip> {
                           "Split",
                           style: theme.textTheme.titleMedium,
                         ),
-                        PersonCounter(theme: theme, personCount: _personCount, onDecrement: decrement, onIncrement: increment,)
+                        PersonCounter(
+                          theme: theme,
+                          personCount: _personCount,
+                          onDecrement: decrement,
+                          onIncrement: increment,
+                        )
                       ],
-                    )
+                    ),
+
+                    //Tip Area
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tip',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        Text(
+                          '\$ 20',
+                          style: theme.textTheme.titleMedium,
+                        )
+                      ],
+                    ),
+
+                    //Slider Text
+                    Text('${(_tipPercentage * 100).round()}%'),
+
+                    //Slider
+                    TipSlider(tipPercentage: _tipPercentage, onChanged: (double value) { 
+                      setState(() {
+                        _tipPercentage = value;
+                      });
+                    },)
                   ],
                 )),
           )
@@ -119,5 +152,4 @@ class _YuTipState extends State<YuTip> {
     );
   }
 }
-
 
