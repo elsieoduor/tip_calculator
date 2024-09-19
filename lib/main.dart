@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tip_calculator/widgets/bill_amount.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
+import 'package:tip_calculator/widgets/tip_row.dart';
 import 'package:tip_calculator/widgets/tip_slider.dart';
 import 'package:tip_calculator/widgets/total_per_person.dart';
 
@@ -94,29 +95,16 @@ class _YuTipState extends State<YuTip> {
                       },
                     ),
                     //Split Bill area
-                    
-                        PersonCounter(
-                          theme: theme,
-                          personCount: _personCount,
-                          onDecrement: decrement,
-                          onIncrement: increment,
-                        ),
-                    
+
+                    PersonCounter(
+                      theme: theme,
+                      personCount: _personCount,
+                      onDecrement: decrement,
+                      onIncrement: increment,
+                    ),
 
                     //Tip Area
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Tip',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        Text(
-                          '$tip',
-                          style: theme.textTheme.titleMedium,
-                        )
-                      ],
-                    ),
+                    TipRow(theme: theme, tip: tip),
 
                     //Slider Text
                     Text('${(_tipPercentage * 100).round()}%'),
